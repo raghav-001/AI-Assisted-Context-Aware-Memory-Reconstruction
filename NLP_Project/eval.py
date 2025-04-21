@@ -41,12 +41,13 @@ bert_r_list = []
 bert_f1_list = []
 
 
-N = 30  # Number of examples to evaluate
+N = 50  # Number of examples to evaluate
+df = df.sample(n=N).reset_index(drop=True)
 for i in tqdm(range(N)):
     input_text = df.loc[i, 'input']
     reference = df.loc[i, 'output']
     # print(f"\n[Input {i}] {input_text}")
-    print(f"[Reference Output]: {reference}")
+    print(f"Reference Output: {reference}")
 
     try:
         prediction = agent.run(input_text, reset=False)
