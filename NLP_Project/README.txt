@@ -1,6 +1,8 @@
 - For all of this to work first install ollama (https://ollama.com/download)
-- After installing run this command in your cmd- ollama pull llama3:latest
-Now you have the model(llama3:latest) locally and you are good to go.
+- After installing run these command in your cmd
+ollama pull llama3:latest
+ollama pull mxbai-embed-large 
+Now you have the model(llama3:latest) and embeddings locally and you are good to go.
 
 1. app.py
 This is the main file. When you run this, it starts the assistant and lets you type messages to talk to it.
