@@ -33,3 +33,6 @@ This is like the assistant’s brain and personality. This file is super importa
 This is where your past conversations are saved. The assistant uses these to remember things you’ve said before. It's handled using ChromaDB.
 Right now it already has few conversation. 
 NOTE: If you want to start it fresh, just delete the db folder.
+
+6. eval.py is the evaluation script 
+Computes cosine similarity, ROGUE and Bert scores comparing LLM responses against dataset(Mentalchat16K) outputs for every input

@@ -106,5 +106,6 @@ def maintain_conversation():
             ids=[f"conv-{os.urandom(6).hex()}"]
         )
 
+if __name__ == "__main__":
+    maintain_conversation()
 
-maintain_conversation()
