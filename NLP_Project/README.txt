@@ -2,6 +2,7 @@
 - After installing run these command in your cmd
 ollama pull llama3:latest
 ollama pull mxbai-embed-large 
+
 Now you have the model(llama3:latest) and embeddings locally and you are good to go.
 
 1. app.py
