@@ -4,6 +4,7 @@ ollama pull llama3:latest
 ollama pull mxbai-embed-large 
 
 Now you have the model(llama3:latest) and embeddings locally and you are good to go.
+Ensure you have smolagents==1.12.0
 
 1. app.py
 This is the main file. When you run this, it starts the assistant and lets you type messages to talk to it.
