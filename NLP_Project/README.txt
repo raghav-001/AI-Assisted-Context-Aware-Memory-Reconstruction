@@ -1,3 +1,7 @@
+- For all of this to work first install ollama (https://ollama.com/download)
+- After installing run this command in your cmd- ollama pull llama3:latest
+Now you have the model(llama3:latest) locally and you are good to go.
+
 1. app.py
 This is the main file. When you run this, it starts the assistant and lets you type messages to talk to it.
 NOTE: If you want to change the prompts file used, you need to make the change in this file. Line 78 has the code to load the prompts file. Use the file you want to use.
