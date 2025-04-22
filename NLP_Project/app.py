@@ -71,7 +71,6 @@ class Model:
             raise e
 
 
-
 model = Model(model_name="llama3:latest")
 
 # Load prompts
@@ -90,6 +89,7 @@ agent = CodeAgent(
     description="An AI assistant that acts as a mental health support assistant.",
     prompt_templates=prompt_templates
 )
+
 
 def maintain_conversation():
     while True:
