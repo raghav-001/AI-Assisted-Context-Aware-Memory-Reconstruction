@@ -9,6 +9,7 @@ from final_answer import FinalAnswerTool
 from retriever_tool import RetrieverTool
 from chromadb import PersistentClient
 
+
 # Optional: Clean up warnings
 os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
@@ -98,6 +99,9 @@ class Model:
         self.tokenizer = tokenizer
 
     def __call__(self, messages, stop_sequences=None, grammar=None):
+        import html
+        import re
+
         prompt = ""
         for m in messages:
             role = m.get("role", "user")
@@ -121,9 +125,20 @@ class Model:
 
         result = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
         response_text = result.split("assistant:")[-1].strip()
-        wrapped = f"```py\nfinal_answer(\"\"\"{response_text}\"\"\")\n```<end_code>"
-        return type("LLMResponse", (), {"content": wrapped})
 
+        # Decode HTML entities (like &quot;)
+        unescaped = html.unescape(response_text)
+
+        # Remove any duplicate `final_answer("` and closing `")` wrappers
+        unwrapped = re.sub(r'```py\s*final_answer\(["\']?', '', unescaped)
+        unwrapped = re.sub(r'["\']?\)\s*```<end_code>', '', unwrapped)
+
+        # Clean and escape again for valid single-line Python string
+        cleaned = unwrapped.replace('"""', '').replace('\n', ' ').replace('\r', '').strip()
+        escaped = cleaned.replace('"', '\\"')
+
+        wrapped = f'```py\nfinal_answer("{escaped}")\n```<end_code>'
+        return type("LLMResponse", (), {"content": wrapped})
 
 
 # ───────────────────────────── Load Prompt Templates ───────────────

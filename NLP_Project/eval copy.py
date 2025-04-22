@@ -41,7 +41,7 @@ bert_r_list = []
 bert_f1_list = []
 
 
-N = 20  # Number of examples to evaluate
+N = 5  # Number of examples to evaluate
 df = df.sample(n=N).reset_index(drop=True)
 for i in tqdm(range(N)):
     input_text = df.loc[i, 'input']
