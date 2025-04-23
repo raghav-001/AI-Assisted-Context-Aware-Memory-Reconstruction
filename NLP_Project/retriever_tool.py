@@ -2,6 +2,8 @@
 from smolagents.tools import Tool
 from datetime import datetime
 import re
+import string
+
 
 class RetrieverTool(Tool):
     name = "retriever"
@@ -21,7 +23,6 @@ class RetrieverTool(Tool):
         self.collection = collection
         self.embedding_fn = embedding_fn
 
-
     def forward(self, query: str) -> str:
         print(f"[DEBUG] Retriever query: {query!r}")
 
@@ -32,29 +33,28 @@ class RetrieverTool(Tool):
         )
 
         candidates = results.get("documents", [[]])[0]
-        for i, d in enumerate(candidates, 1):
-            print(f"[DEBUG] Matching records from DB  {i}. {d!r}")
-        if not candidates:
-            return None
+        distances = results.get("distances", [[]])[0]
+        scored_results = sorted(list(zip(distances, candidates)))
+        scored_results = [(dist, doc) for dist, doc in scored_results
+                          if len(doc.strip().lower()) > 2]
 
-        query_words = set(query.lower().split())
-        scored = []
+        final = scored_results
+        # final = []
+        # trans = str.maketrans("","", string.punctuation)
+        # query_words = set(query.translate(trans).lower().split())
+        #
+        # for dist, doc in scored_results:
+        #     doc_words = set(doc.strip().translate(trans).lower().split())
+        #     overlap = len(query_words & doc_words)
+        #     score = overlap / len(query_words)
+        #     if score >= 0.3:
+        #         final.append((dist, doc.strip()))
 
-        for doc in candidates:
-            doc_clean = doc.strip().lower()
-            if len(doc_clean.split()) < 2 or doc_clean.endswith("?"):
-                continue
+        if not final:
+            return "No relevant memory was found related to this query."
 
-            doc_words = set(doc_clean.split())
-            overlap = len(query_words & doc_words)
-            score = overlap / len(query_words)  
-            if score >= 0.3:  
-                scored.append((score, doc.strip()))
+        print('[DEBUG] Matching records and distances in DB')
+        for i, r in enumerate(final, 1):
+            print(f"[DEBUG] {i} | Distance {r[0]} | {r[1]!r}")
 
-        if not scored:
-            return "No relevant memory was found related to this query"
-
-        # Sort and return up to 3 relevant results
-        scored.sort(reverse=True)
-        top_docs = [doc for _, doc in scored[:3]]
-        return "\n\n".join(top_docs)
+        return "\n\n".join((doc for _, doc in final[:5]))
